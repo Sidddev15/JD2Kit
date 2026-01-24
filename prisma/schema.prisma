@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum JobStatus {
+  DRAFT
+  FINAL
+}
+
+enum ProfileType {
+  FRONTEND
+  BACKEND
+  FULLSTACK
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String?  @unique
+  createdAt DateTime @default(now())
+
+  jobRuns   JobRun[]
+}
+
+model JobRun {
+  id              String       @id @default(uuid())
+  userId          String?
+  user            User?        @relation(fields: [userId], references: [id])
+
+  profileType     ProfileType
+  status          JobStatus    @default(DRAFT)
+
+  companyName     String?
+  roleTitle       String
+  location        String?
+  seniorityLevel  String?
+  domain          String?
+
+  jdText          String       // raw pasted JD
+  jobJson         Json         // generated + user-edited structured JSON
+
+  tags            String[]     // ["react", "frontend", "saas"]
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  prompts         PromptOutput[]
+  interviewPack   InterviewPack?
+
+  @@index([profileType])
+  @@index([companyName])
+  @@index([roleTitle])
+  @@index([createdAt])
+}
+
+model PromptOutput {
+  id         String   @id @default(uuid())
+  jobRunId   String
+  jobRun     JobRun   @relation(fields: [jobRunId], references: [id], onDelete: Cascade)
+
+  type       String   // resume_prompt | bullets_prompt | cover_letter_prompt | interview_prompt
+  content    String   // FULL prompt text (important)
+
+  createdAt  DateTime @default(now())
+
+  @@index([type])
+}
+
+model InterviewPack {
+  id             String   @id @default(uuid())
+  jobRunId       String   @unique
+  jobRun         JobRun   @relation(fields: [jobRunId], references: [id], onDelete: Cascade)
+
+  topics         Json     // topic map / syllabus
+  questions      Json     // categorized questions
+  answerGuides   Json     // expected answer structure
+  followUps      Json
+  codingTasks    Json
+  systemDesign   Json
+
+  createdAt      DateTime @default(now())
+}
