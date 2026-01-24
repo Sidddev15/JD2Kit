@@ -1,4 +1,4 @@
-# JobForge
+# JD2Kit
 
 JD → job.json → prompts → interview pack, with history + exports.
 
