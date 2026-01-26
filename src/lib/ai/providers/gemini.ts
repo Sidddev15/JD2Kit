@@ -1,7 +1,9 @@
-import { AIClient } from "./types";
+import { AIClient } from "@/lib/ai/types";
 import { env } from "@/lib/env";
 
 export class GeminiClient implements AIClient {
+  provider = "gemini" as const;
+  model = "gemini-1.5-flash";
   private endpoint: string;
 
   constructor() {
@@ -13,7 +15,7 @@ export class GeminiClient implements AIClient {
       "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent";
   }
 
-  async generateJSON(prompt: string): Promise<string> {
+  async generate(prompt: string, temperature = 0): Promise<string> {
     const res = await fetch(`${this.endpoint}?key=${env.GEMINI_API_KEY}`, {
       method: "POST",
       headers: {
@@ -27,7 +29,7 @@ export class GeminiClient implements AIClient {
           },
         ],
         generationConfig: {
-          temperature: 0,
+          temperature,
         },
       }),
     });
@@ -40,5 +42,9 @@ export class GeminiClient implements AIClient {
     const json = await res.json();
 
     return json.candidates[0].content.parts[0].text;
+  }
+
+  async generateJSON(prompt: string, temperature = 0): Promise<string> {
+    return this.generate(prompt, temperature);
   }
 }

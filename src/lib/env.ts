@@ -8,6 +8,7 @@ export const env = createEnv({
       .default("development"),
 
     DATABASE_URL: z.string().optional(),
+    AI_MODEL: z.string().default("llama-3.1-70b-versatile"),
 
     AI_PROVIDER: z.enum(["groq", "openai", "gemini"]).default("groq"),
 
@@ -20,6 +21,7 @@ export const env = createEnv({
   runtimeEnv: {
     NODE_ENV: process.env.NODE_ENV,
     DATABASE_URL: process.env.DATABASE_URL,
+    AI_MODEL: process.env.AI_MODEL,
     AI_PROVIDER: process.env.AI_PROVIDER,
 
     GROQ_API_KEY: process.env.GROQ_API_KEY,

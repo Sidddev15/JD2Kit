@@ -1,3 +1,6 @@
 export interface AIClient {
-  generateJSON(prompt: string): Promise<string>;
+  provider: "groq" | "openai" | "gemini";
+  model: string;
+  generate(prompt: string, temperature?: number): Promise<string>;
+  generateJSON(prompt: string, temperature?: number): Promise<string>;
 }

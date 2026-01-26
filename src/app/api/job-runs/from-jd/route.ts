@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { getRequestId, ok, bad } from "@/lib/http";
-import { generateJobJson } from "@/lib/services/job-json-service";
+import { generateJobJson } from "@/lib/services/job-run.from-jd.service";
 import { ProfileType } from "@prisma/client";
 
 export async function POST(req: Request) {
