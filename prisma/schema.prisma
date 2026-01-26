@@ -49,7 +49,7 @@ model JobRun {
   updatedAt       DateTime     @updatedAt
 
   prompts         PromptOutput[]
-  interviewPack   InterviewPack?
+  interviewPack   InterviewPack[]
 
   @@index([profileType])
   @@index([companyName])
@@ -72,15 +72,22 @@ model PromptOutput {
 
 model InterviewPack {
   id             String   @id @default(uuid())
-  jobRunId       String   @unique
+  jobRunId       String
   jobRun         JobRun   @relation(fields: [jobRunId], references: [id], onDelete: Cascade)
 
-  topics         Json     // topic map / syllabus
-  questions      Json     // categorized questions
-  answerGuides   Json     // expected answer structure
+  version        Int
+  isLatest       Boolean  @default(true)
+
+  topics         Json
+  questions      Json
+  answerGuides   Json
   followUps      Json
   codingTasks    Json
   systemDesign   Json
 
   createdAt      DateTime @default(now())
+
+  @@index([jobRunId])
+  @@index([isLatest])
+  @@unique([jobRunId, version])
 }
