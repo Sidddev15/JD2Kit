@@ -48,7 +48,7 @@ export default function NewJobRunPage() {
         throw new Error(json?.error ?? "Failed to create JobRun");
       }
 
-      router.push(`/app/job/${json.data.id}`);
+      router.push(`/job/${json.data.id}`);
     } catch (e: any) {
       alert(e?.message ?? "Failed");
     } finally {

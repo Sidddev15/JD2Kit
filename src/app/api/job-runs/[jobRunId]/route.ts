@@ -6,11 +6,12 @@ import { ProfileType, JobStatus } from "@prisma/client";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { jobRunId: string } }
+  { params }: { params: Promise<{ jobRunId: string }> }
 ) {
   const requestId = getRequestId(req);
 
   try {
+    const { jobRunId } = await params;
     const body = await req.json();
 
     const updates: any = {};
@@ -40,7 +41,7 @@ export async function PATCH(
     }
 
     const updated = await prisma.jobRun.update({
-      where: { id: params.jobRunId },
+      where: { id: jobRunId },
       data: updates,
     });
 

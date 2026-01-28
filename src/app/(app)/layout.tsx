@@ -13,10 +13,10 @@ export default function AppLayout({ children }: {children: ReactNode}) {
           </Link>
 
           <nav className="flex items-center gap-2">
-            <Link href="/app/new">
+            <Link href="/new">
               <Button size="sm">New Job Run</Button>
             </Link>
-            <Link href="/app/history">
+            <Link href="/history">
               <Button size="sm" variant="outline">
                 History
               </Button>

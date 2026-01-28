@@ -13,7 +13,7 @@ export default function AppHome() {
           <p className="text-sm text-muted-foreground">
             Paste a JD → generate job.json → prompts → interview pack.
           </p>
-          <Link href="/app/new">
+          <Link href="new">
             <Button className="w-full md:w-auto">New Job Run</Button>
           </Link>
         </CardContent>
@@ -27,7 +27,7 @@ export default function AppHome() {
           <p className="text-sm text-muted-foreground">
             View saved job runs, prompts, and interview packs.
           </p>
-          <Link href="/app/history">
+          <Link href="history">
             <Button variant="outline" className="w-full md:w-auto">
               Open History
             </Button>

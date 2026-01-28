@@ -24,7 +24,18 @@ export async function POST(
       jobJson: jobRun.jobJson,
     });
 
-    return ok(prompts, requestId);
+    await prisma.$transaction([
+      prisma.promptOutput.deleteMany({ where: { jobRunId } }),
+      prisma.promptOutput.createMany({
+        data: prompts.map((p) => ({
+          jobRunId,
+          type: p.type,
+          content: p.content,
+        })),
+      }),
+    ]);
+
+    return ok({ prompts }, requestId);
   } catch (err) {
     console.error("Failed to generate prompts", { requestId, err });
     return bad("Failed to generate prompts", requestId, 500);

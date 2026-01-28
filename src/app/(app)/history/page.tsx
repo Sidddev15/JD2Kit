@@ -31,7 +31,7 @@ export default async function HistoryPage() {
 
       <div className="grid gap-3">
         {jobRuns.map((jr) => (
-          <Link key={jr.id} href={`/app/job/${jr.id}`}>
+          <Link key={jr.id} href={`/job/${jr.id}`}>
             <Card className="hover:bg-muted/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-base">
