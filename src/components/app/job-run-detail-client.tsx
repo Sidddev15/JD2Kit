@@ -10,6 +10,7 @@ import { InterviewPackViewer } from "@/components/app/interview-pack-viewer";
 import { JobJsonEditor } from "@/components/app/job-json-editor";
 import { PromptsViewer } from "@/components/app/prompts-viewer";
 import { cn } from "@/lib/utils";
+import { DownloadJsonButton } from "@/components/app/download-buttons";
 
 type PromptDto = { type: string; content: string; createdAt: string };
 
@@ -73,7 +74,7 @@ export function JobRunDetailClient({
         throw new Error(json?.error ?? "Failed to generate prompts");
       }
       showToast("Prompts generated", "success");
-      location.reload();
+      setTimeout(() => location.reload(), 400);
     } catch (err: any) {
       showToast(err?.message ?? "Failed to generate prompts", "error");
     } finally {
@@ -92,7 +93,7 @@ export function JobRunDetailClient({
         throw new Error(json?.error ?? "Failed to generate interview pack");
       }
       showToast("Interview pack generated", "success");
-      location.reload();
+      setTimeout(() => location.reload(), 400);
     } catch (err: any) {
       showToast(err?.message ?? "Failed to generate interview pack", "error");
     } finally {
@@ -184,6 +185,10 @@ export function JobRunDetailClient({
           latestVersion={(latestPack as any)?.version ?? null}
           pack={latestPack}
         />
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        <DownloadJsonButton filename={`${jobRun.id}-job.json`} data={jobRun.jobJson} />
       </div>
 
       {toast ? (

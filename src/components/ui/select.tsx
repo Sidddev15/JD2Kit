@@ -7,6 +7,7 @@ type SelectContextValue = {
   value?: string
   selectedLabel?: string
   placeholder?: string
+  disabled?: boolean
   setOpen: (open: boolean) => void
   select: (value: string, label?: string) => void
 }
@@ -18,6 +19,7 @@ export type SelectProps = {
   defaultValue?: string
   onValueChange?: (value: string) => void
   placeholder?: string
+  disabled?: boolean
   children: React.ReactNode
 }
 
@@ -26,6 +28,7 @@ export function Select({
   defaultValue,
   onValueChange,
   placeholder,
+  disabled = false,
   children,
 }: SelectProps) {
   const [open, setOpen] = React.useState(false)
@@ -53,6 +56,7 @@ export function Select({
     value,
     selectedLabel,
     placeholder,
+    disabled,
     setOpen,
     select,
   }
@@ -77,7 +81,7 @@ export const SelectTrigger = React.forwardRef<
   HTMLButtonElement,
   SelectTriggerProps
 >(({ className, children, ...props }, ref) => {
-  const { open, setOpen } = useSelectContext("SelectTrigger")
+  const { open, setOpen, disabled } = useSelectContext("SelectTrigger")
   return (
     <button
       ref={ref}
@@ -88,7 +92,8 @@ export const SelectTrigger = React.forwardRef<
       )}
       aria-haspopup="listbox"
       aria-expanded={open}
-      onClick={() => setOpen(!open)}
+      onClick={() => !disabled && setOpen(!open)}
+      disabled={disabled}
       {...props}
     >
       {children}
@@ -129,8 +134,8 @@ export interface SelectContentProps
 
 export const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps>(
   ({ className, children, ...props }, ref) => {
-    const { open } = useSelectContext("SelectContent")
-    if (!open) return null
+    const { open, disabled } = useSelectContext("SelectContent")
+    if (!open || disabled) return null
     return (
       <div
         ref={ref}

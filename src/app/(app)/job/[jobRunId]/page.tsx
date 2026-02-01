@@ -42,9 +42,7 @@ export default async function JobRunDetailPage({
     })),
   };
 
-  const latestPackDto = latestPack
-    ? JSON.parse(JSON.stringify(latestPack))
-    : null;
+  const latestPackDto = latestPack ? JSON.parse(JSON.stringify(latestPack)) : null;
 
   return <JobRunDetailClient jobRun={jobRunDto} latestPack={latestPackDto} />;
 }

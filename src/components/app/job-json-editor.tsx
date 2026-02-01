@@ -8,6 +8,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { CopyButton } from "@/components/app/copy-button";
 import { JobJsonSchema } from "@/lib/job-json.schema";
+import { toast } from "sonner";
 
 export function JobJsonEditor(props: {
   initial: unknown;
@@ -37,6 +38,9 @@ export function JobJsonEditor(props: {
     setSaving(true);
     try {
       await props.onSave(parsed.obj);
+      toast.success("job.json saved");
+    } catch (e: any) {
+      toast.error(e?.message ?? "Failed to save job.json");
     } finally {
       setSaving(false);
     }
