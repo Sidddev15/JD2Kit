@@ -137,16 +137,18 @@ export const SelectContent = React.forwardRef<HTMLDivElement, SelectContentProps
     const { open, disabled } = useSelectContext("SelectContent")
     if (!open || disabled) return null
     return (
-      <div
-        ref={ref}
-        role="listbox"
-        className={cn(
-          "relative mt-2 w-full rounded-md border border-input bg-popover text-popover-foreground shadow-md",
-          className,
-        )}
-        {...props}
-      >
-        <div className="max-h-64 overflow-y-auto py-1">{children}</div>
+      <div className="relative">
+        <div
+          ref={ref}
+          role="listbox"
+          className={cn(
+            "absolute z-50 mt-2 w-full rounded-md border border-input bg-popover text-popover-foreground shadow-md",
+            className,
+          )}
+          {...props}
+        >
+          <div className="max-h-64 overflow-y-auto py-1">{children}</div>
+        </div>
       </div>
     )
   },

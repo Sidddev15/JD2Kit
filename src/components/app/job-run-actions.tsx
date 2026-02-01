@@ -15,13 +15,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { JOB_TRACKS } from "@/lib/constants";
 
-type ProfileType = "FRONTEND" | "BACKEND" | "FULLSTACK";
+type JobTrack = (typeof JOB_TRACKS)[number]["value"];
 type JobStatus = "DRAFT" | "FINAL";
+const isJobTrack = (v: string): v is JobTrack =>
+  JOB_TRACKS.some((t) => t.value === v);
 
 export function JobRunActions(props: {
   jobRunId: string;
-  profileType: ProfileType;
+  profileType: JobTrack;
   status: JobStatus;
   jobJson: unknown;
 
@@ -31,7 +34,7 @@ export function JobRunActions(props: {
 }) {
   const router = useRouter();
 
-  const [profileType, setProfileType] = useState<ProfileType>(props.profileType);
+  const [profileType, setProfileType] = useState<JobTrack>(props.profileType);
   const [status, setStatus] = useState<JobStatus>(props.status);
   const [busy, setBusy] = useState<null | "prompts" | "pack" | "save">(null);
 
@@ -44,7 +47,7 @@ export function JobRunActions(props: {
       .replace(/(^-|-$)/g, "");
   }, [props.roleTitle, props.companyName]);
 
-  async function patchJobRun(next: Partial<{ profileType: ProfileType; status: JobStatus }>) {
+  async function patchJobRun(next: Partial<{ profileType: JobTrack; status: JobStatus }>) {
     setBusy("save");
     try {
       const res = await fetch(`/api/job-runs/${props.jobRunId}`, {
@@ -107,26 +110,31 @@ export function JobRunActions(props: {
   return (
     <div className="flex flex-col gap-3 rounded-lg border p-3 md:flex-row md:items-center md:justify-between">
       <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="secondary">{profileType}</Badge>
+        <Badge variant="secondary">
+          {JOB_TRACKS.find((t) => t.value === profileType)?.label ?? profileType}
+        </Badge>
         <Badge variant="outline">{status}</Badge>
 
-        <div className="w-[160px]">
+        <div className="w-[260px] shrink-0">
           <Select
             value={profileType}
             onValueChange={(v) => {
-              const next = v as ProfileType;
-              setProfileType(next);
-              patchJobRun({ profileType: next });
+              if (!isJobTrack(v)) return;
+              setProfileType(v);
+              patchJobRun({ profileType: v });
             }}
             disabled={busy !== null}
           >
-            <SelectTrigger>
-              <SelectValue placeholder="Profile" />
+            <SelectTrigger className="h-10">
+              <SelectValue placeholder="Job Track" />
             </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="FRONTEND">Frontend</SelectItem>
-              <SelectItem value="BACKEND">Backend</SelectItem>
-              <SelectItem value="FULLSTACK">Fullstack</SelectItem>
+
+            <SelectContent className="max-h-[320px]">
+              {JOB_TRACKS.map((track) => (
+                <SelectItem key={track.value} value={track.value}>
+                  {track.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
