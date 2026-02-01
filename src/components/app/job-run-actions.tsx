@@ -15,16 +15,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { JOB_TRACKS } from "@/lib/constants";
-
-type JobTrack = (typeof JOB_TRACKS)[number]["value"];
+type ProfileType = "FRONTEND" | "BACKEND" | "FULLSTACK";
 type JobStatus = "DRAFT" | "FINAL";
-const isJobTrack = (v: string): v is JobTrack =>
-  JOB_TRACKS.some((t) => t.value === v);
+
+const PROFILE_OPTIONS: Array<{ value: ProfileType; label: string }> = [
+  { value: "FRONTEND", label: "Frontend Engineer" },
+  { value: "BACKEND", label: "Backend Engineer" },
+  { value: "FULLSTACK", label: "Full-Stack Engineer" },
+];
+
+const isProfileType = (v: string): v is ProfileType =>
+  PROFILE_OPTIONS.some((t) => t.value === v);
 
 export function JobRunActions(props: {
   jobRunId: string;
-  profileType: JobTrack;
+  profileType: ProfileType;
   status: JobStatus;
   jobJson: unknown;
 
@@ -34,7 +39,7 @@ export function JobRunActions(props: {
 }) {
   const router = useRouter();
 
-  const [profileType, setProfileType] = useState<JobTrack>(props.profileType);
+  const [profileType, setProfileType] = useState<ProfileType>(props.profileType);
   const [status, setStatus] = useState<JobStatus>(props.status);
   const [busy, setBusy] = useState<null | "prompts" | "pack" | "save">(null);
 
@@ -47,7 +52,7 @@ export function JobRunActions(props: {
       .replace(/(^-|-$)/g, "");
   }, [props.roleTitle, props.companyName]);
 
-  async function patchJobRun(next: Partial<{ profileType: JobTrack; status: JobStatus }>) {
+  async function patchJobRun(next: Partial<{ profileType: ProfileType; status: JobStatus }>) {
     setBusy("save");
     try {
       const res = await fetch(`/api/job-runs/${props.jobRunId}`, {
@@ -111,7 +116,7 @@ export function JobRunActions(props: {
     <div className="flex flex-col gap-3 rounded-lg border p-3 md:flex-row md:items-center md:justify-between">
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="secondary">
-          {JOB_TRACKS.find((t) => t.value === profileType)?.label ?? profileType}
+          {PROFILE_OPTIONS.find((t) => t.value === profileType)?.label ?? profileType}
         </Badge>
         <Badge variant="outline">{status}</Badge>
 
@@ -119,7 +124,7 @@ export function JobRunActions(props: {
           <Select
             value={profileType}
             onValueChange={(v) => {
-              if (!isJobTrack(v)) return;
+              if (!isProfileType(v)) return;
               setProfileType(v);
               patchJobRun({ profileType: v });
             }}
@@ -130,7 +135,7 @@ export function JobRunActions(props: {
             </SelectTrigger>
 
             <SelectContent className="max-h-[320px]">
-              {JOB_TRACKS.map((track) => (
+              {PROFILE_OPTIONS.map((track) => (
                 <SelectItem key={track.value} value={track.value}>
                   {track.label}
                 </SelectItem>
