@@ -115,13 +115,13 @@ export function InterviewPackRenderer(props: {
                 <Accordion type="multiple" className="w-full">
                   {topics.map((t, idx) => (
                     <AccordionItem key={idx} value={`t-${idx}`}>
-                      <AccordionTrigger>
+                      <AccordionTrigger value={`t-${idx}`}>
                         <div className="text-left">
                           <div className="font-medium">{t.title ?? `Topic ${idx + 1}`}</div>
                           {t.summary ? <div className="text-xs text-muted-foreground">{t.summary}</div> : null}
                         </div>
                       </AccordionTrigger>
-                      <AccordionContent>
+                      <AccordionContent value={`t-${idx}`}>
                         <div className="text-sm text-muted-foreground">
                           Use this as your study checklist. Convert each topic into notes + examples.
                         </div>
@@ -151,13 +151,13 @@ export function InterviewPackRenderer(props: {
                 <Accordion type="multiple" className="w-full">
                   {byCategory.map(([cat, items]) => (
                     <AccordionItem key={cat} value={`c-${cat}`}>
-                      <AccordionTrigger>
+                      <AccordionTrigger value={`c-${cat}`}>
                         <div className="flex items-center gap-2">
                           <span className="font-medium">{cat}</span>
                           <Badge variant="secondary">{items.length}</Badge>
                         </div>
                       </AccordionTrigger>
-                      <AccordionContent>
+                      <AccordionContent value={`c-${cat}`}>
                         <div className="space-y-3">
                           {items.map((it, idx) => (
                             <div key={idx} className="rounded-md border bg-muted/20 p-3">

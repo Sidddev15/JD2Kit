@@ -14,10 +14,12 @@ export const dynamic = "force-dynamic";
 export default async function JobRunDetailPage({
   params,
 }: {
-  params: { jobRunId: string };
+  params: Promise<{ jobRunId: string }>;
 }) {
+  const { jobRunId } = await params;
+
   const jobRun = await prisma.jobRun.findUnique({
-    where: { id: params.jobRunId },
+    where: { id: jobRunId },
     include: {
       prompts: { orderBy: { createdAt: "desc" } },
     },
