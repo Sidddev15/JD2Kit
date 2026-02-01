@@ -1,12 +1,18 @@
 import Link from "next/link";
+import type { JobRun } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+type HistoryJobRun = Pick<
+  JobRun,
+  "id" | "roleTitle" | "companyName" | "profileType" | "status" | "createdAt" | "tags"
+>;
+
 export const dynamic = "force-dynamic";
 
 export default async function HistoryPage() {
-  const jobRuns = await prisma.jobRun.findMany({
+  const jobRuns: HistoryJobRun[] = await prisma.jobRun.findMany({
     orderBy: { createdAt: "desc" },
     take: 50,
     select: {
@@ -30,7 +36,7 @@ export default async function HistoryPage() {
       </div>
 
       <div className="grid gap-3">
-        {jobRuns.map((jr) => (
+        {jobRuns.map((jr: HistoryJobRun) => (
           <Link key={jr.id} href={`/job/${jr.id}`}>
             <Card className="hover:bg-muted/40">
               <CardHeader className="pb-2">
