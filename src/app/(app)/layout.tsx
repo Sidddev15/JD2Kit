@@ -1,14 +1,14 @@
-import type {ReactNode} from 'react';
-import Link from 'next/link';
-import {cn} from '@/lib/utils';
-import {Button} from '@/components/ui/button';
+import type { ReactNode } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Toaster } from "sonner";
 
-export default function AppLayout({ children }: {children: ReactNode}) {
+export default function AppLayout({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen bg-background">
       <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          <Link href="/app" className="font-semibold tracking-tight">
+          <Link href="/" className="font-semibold tracking-tight">
             JD2KIT
           </Link>
 
@@ -25,7 +25,9 @@ export default function AppLayout({ children }: {children: ReactNode}) {
         </div>
       </header>
 
-      <main className={cn("mx-auto max-w-6xl px-4 py-6")}>{children}</main>
+      <main className="mx-auto max-w-6xl px-4 py-6">{children}</main>
+
+      <Toaster richColors position="top-right" />
     </div>
-  )
+  );
 }
