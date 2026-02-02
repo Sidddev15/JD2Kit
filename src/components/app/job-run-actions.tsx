@@ -15,14 +15,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-type ProfileType = "FRONTEND" | "BACKEND" | "FULLSTACK";
+import { JOB_TRACKS } from "@/lib/constants";
+
+// Derive UI-facing ProfileType from the job track list to avoid coupling to Prisma types.
+type ProfileType = (typeof JOB_TRACKS)[number]["value"];
 type JobStatus = "DRAFT" | "FINAL";
 
-const PROFILE_OPTIONS: Array<{ value: ProfileType; label: string }> = [
-  { value: "FRONTEND", label: "Frontend Engineer" },
-  { value: "BACKEND", label: "Backend Engineer" },
-  { value: "FULLSTACK", label: "Full-Stack Engineer" },
-];
+const PROFILE_OPTIONS = JOB_TRACKS;
 
 const isProfileType = (v: string): v is ProfileType =>
   PROFILE_OPTIONS.some((t) => t.value === v);

@@ -1,25 +1,14 @@
 import Link from "next/link";
-import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-type HistoryJobRun = Prisma.JobRunGetPayload<{
-  select: {
-    id: true;
-    roleTitle: true;
-    companyName: true;
-    profileType: true;
-    status: true;
-    createdAt: true;
-    tags: true;
-  };
-}>;
+import type { JobRunDTO } from "@/types/job-run";
+import { JOB_TRACKS } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
 export default async function HistoryPage() {
-  const jobRuns: HistoryJobRun[] = await prisma.jobRun.findMany({
+  const jobRunsRaw = await prisma.jobRun.findMany({
     orderBy: { createdAt: "desc" },
     take: 50,
     select: {
@@ -32,6 +21,15 @@ export default async function HistoryPage() {
       tags: true,
     },
   });
+  const jobRuns: JobRunDTO[] = jobRunsRaw.map((jr) => ({
+    id: jr.id,
+    roleTitle: jr.roleTitle,
+    companyName: jr.companyName,
+    profileType: jr.profileType,
+    status: jr.status,
+    createdAt: jr.createdAt.toISOString(),
+    tags: jr.tags,
+  }));
 
   return (
     <div className="space-y-4">
@@ -53,7 +51,13 @@ export default async function HistoryPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex flex-wrap items-center gap-2 text-sm">
-                <Badge variant="secondary">{jr.profileType}</Badge>
+                <Badge variant="secondary">
+                  {JOB_TRACKS.find(
+                    (t) =>
+                      t.value ===
+                      (jr.profileType as (typeof JOB_TRACKS)[number]["value"]),
+                  )?.label ?? jr.profileType}
+                </Badge>
                 <Badge variant="outline">{jr.status}</Badge>
                 <span className="text-muted-foreground">
                   {new Date(jr.createdAt).toLocaleString()}

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
+import { JOB_TRACKS } from "@/lib/constants";
 
 import { SectionHeader } from "@/components/app/section-header";
 import { JobRunActions } from "@/components/app/job-run-actions";
@@ -34,6 +35,8 @@ export default async function JobRunDetailPage({
     orderBy: { version: "desc" },
   });
 
+  const jobTrack = jobRun.profileType as (typeof JOB_TRACKS)[number]["value"];
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -44,7 +47,9 @@ export default async function JobRunDetailPage({
             {jobRun.companyName ? <span className="text-muted-foreground"> · {jobRun.companyName}</span> : null}
           </h1>
           <div className="mt-1 flex flex-wrap items-center gap-2">
-            <Badge variant="secondary">{jobRun.profileType}</Badge>
+            <Badge variant="secondary">
+              {JOB_TRACKS.find((t) => t.value === jobTrack)?.label ?? jobRun.profileType}
+            </Badge>
             <Badge variant="outline">{jobRun.status}</Badge>
             {jobRun.location ? <Badge>{jobRun.location}</Badge> : null}
           </div>
@@ -57,7 +62,7 @@ export default async function JobRunDetailPage({
       {/* Global actions */}
       <JobRunActions
         jobRunId={jobRun.id}
-        profileType={jobRun.profileType}
+        profileType={jobTrack}
         status={jobRun.status}
         jobJson={jobRun.jobJson}
         roleTitle={jobRun.roleTitle}
@@ -73,7 +78,7 @@ export default async function JobRunDetailPage({
         />
         <div className="grid gap-4 lg:grid-cols-2">
           <JDViewer jdText={jobRun.jdText} />
-          <JobJsonSummary jobRunId={jobRun.id} jobJson={jobRun.jobJson} profileType={jobRun.profileType} />
+          <JobJsonSummary jobRunId={jobRun.id} jobJson={jobRun.jobJson} profileType={jobTrack} />
         </div>
       </div>
 

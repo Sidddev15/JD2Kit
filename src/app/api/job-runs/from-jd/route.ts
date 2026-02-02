@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { prisma } from "@/lib/prisma";
 import { getRequestId, ok, bad } from "@/lib/http";
 import { generateJobJson } from "@/lib/services/job-run.from-jd.service";
-import { ProfileType } from "@prisma/client";
 
 export async function POST(req: Request) {
   const requestId = getRequestId(req);
@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { jdText, profileType } = body as {
       jdText?: string;
-      profileType?: ProfileType;
+      profileType?: string;
     };
 
     if (!jdText || jdText.length < 50) {
@@ -23,7 +23,8 @@ export async function POST(req: Request) {
       data: {
         jdText,
         jobJson,
-        profileType: profileType ?? "FULLSTACK",
+        // Accepts new track values; cast to satisfy Prisma type until client is regenerated.
+        profileType: (profileType as any) ?? ("FULLSTACK_ENGINEER" as any),
         roleTitle: jobJson.role_title,
         companyName: jobJson.company_name,
         location: jobJson.location,

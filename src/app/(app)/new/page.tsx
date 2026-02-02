@@ -19,7 +19,29 @@ import {
 } from "@/components/ui/select";
 
 const FormSchema = z.object({
-  profileType: z.enum(["FRONTEND", "BACKEND", "FULLSTACK"]),
+  profileType: z.enum([
+    "FRONTEND_ENGINEER",
+    "BACKEND_ENGINEER",
+    "FULLSTACK_ENGINEER",
+    "MOBILE_ENGINEER",
+    "DEVOPS_ENGINEER",
+    "DATA_ENGINEER",
+    "ML_ENGINEER",
+    "QA_ENGINEER",
+    "PRODUCT_MANAGER",
+    "PRODUCT_DESIGNER",
+    "BUSINESS_ANALYST",
+    "HR",
+    "RECRUITER",
+    "OPERATIONS",
+    "PROJECT_MANAGER",
+    "PROGRAM_MANAGER",
+    "SALES",
+    "CUSTOMER_SUCCESS",
+    "TECH_LEAD",
+    "ENGINEERING_MANAGER",
+    "INTERN",
+  ]),
   jdText: z.string().min(50, "Paste a fuller JD (min 50 chars)."),
 });
 
@@ -31,7 +53,7 @@ export default function NewJobRunPage() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
-    defaultValues: { profileType: "FRONTEND", jdText: "" },
+    defaultValues: { profileType: "FRONTEND_ENGINEER", jdText: "" },
   });
 
   async function onSubmit(values: FormValues) {
@@ -81,9 +103,27 @@ export default function NewJobRunPage() {
                   <SelectValue placeholder="Select profile" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="FRONTEND">Frontend</SelectItem>
-                  <SelectItem value="BACKEND">Backend</SelectItem>
-                  <SelectItem value="FULLSTACK">Fullstack</SelectItem>
+                  <SelectItem value="FRONTEND_ENGINEER">Frontend Engineer</SelectItem>
+                  <SelectItem value="BACKEND_ENGINEER">Backend Engineer</SelectItem>
+                  <SelectItem value="FULLSTACK_ENGINEER">Full-Stack Engineer</SelectItem>
+                  <SelectItem value="MOBILE_ENGINEER">Mobile Engineer</SelectItem>
+                  <SelectItem value="DEVOPS_ENGINEER">DevOps / Platform Engineer</SelectItem>
+                  <SelectItem value="DATA_ENGINEER">Data Engineer</SelectItem>
+                  <SelectItem value="ML_ENGINEER">ML / AI Engineer</SelectItem>
+                  <SelectItem value="QA_ENGINEER">QA / Automation Engineer</SelectItem>
+                  <SelectItem value="PRODUCT_MANAGER">Product Manager</SelectItem>
+                  <SelectItem value="PRODUCT_DESIGNER">Product Designer (UI/UX)</SelectItem>
+                  <SelectItem value="BUSINESS_ANALYST">Business Analyst</SelectItem>
+                  <SelectItem value="HR">HR</SelectItem>
+                  <SelectItem value="RECRUITER">Recruiter / Talent Acquisition</SelectItem>
+                  <SelectItem value="OPERATIONS">Operations Manager</SelectItem>
+                  <SelectItem value="PROJECT_MANAGER">Project Manager</SelectItem>
+                  <SelectItem value="PROGRAM_MANAGER">Program Manager</SelectItem>
+                  <SelectItem value="SALES">Sales / Pre-Sales</SelectItem>
+                  <SelectItem value="CUSTOMER_SUCCESS">Customer Success</SelectItem>
+                  <SelectItem value="TECH_LEAD">Tech Lead</SelectItem>
+                  <SelectItem value="ENGINEERING_MANAGER">Engineering Manager</SelectItem>
+                  <SelectItem value="INTERN">Intern / Fresher</SelectItem>
                 </SelectContent>
               </Select>
             </div>
