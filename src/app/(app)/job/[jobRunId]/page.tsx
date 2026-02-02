@@ -91,7 +91,7 @@ export default async function JobRunDetailPage({
         />
         <PromptCards
           jobRunId={jobRun.id}
-          prompts={(jobRun.prompts ?? []).map((p) => ({
+          prompts={(jobRun.prompts ?? []).map((p: { type: string; content: string; createdAt: Date }) => ({
             type: p.type,
             content: p.content,
             createdAt: p.createdAt.toISOString(),
