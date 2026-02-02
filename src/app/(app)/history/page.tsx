@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,17 +21,15 @@ export default async function HistoryPage() {
       tags: true,
     },
   });
-  type JobRunRow = Prisma.JobRunGetPayload<{
-    select: {
-      id: true;
-      roleTitle: true;
-      companyName: true;
-      profileType: true;
-      status: true;
-      createdAt: true;
-      tags: true;
-    };
-  }>;
+  type JobRunRow = {
+    id: string;
+    roleTitle: string;
+    companyName: string | null;
+    profileType: string;
+    status: string;
+    createdAt: Date;
+    tags: string[];
+  };
 
   const jobRuns: JobRunDTO[] = jobRunsRaw.map((jr: JobRunRow) => ({
     id: jr.id,
