@@ -1,4 +1,5 @@
-import { ProfileType } from "@prisma/client";
+import { $Enums } from "@prisma/client";
+type ProfileType = $Enums.ProfileType;
 import {
   buildResumeRewritePrompt,
   buildResumeBulletsPrompt,

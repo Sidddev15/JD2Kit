@@ -1,4 +1,5 @@
-import { ProfileType } from "@prisma/client";
+import { $Enums } from "@prisma/client";
+type ProfileType = $Enums.ProfileType;
 
 const pretty = (value: unknown) => JSON.stringify(value ?? {}, null, 2);
 

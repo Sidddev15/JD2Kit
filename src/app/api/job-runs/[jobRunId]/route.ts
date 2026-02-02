@@ -2,7 +2,7 @@
 import { prisma } from "@/lib/prisma";
 import { getRequestId, ok, bad } from "@/lib/http";
 import { JobJsonSchema } from "@/lib/job-json.schema";
-import { ProfileType, JobStatus } from "@prisma/client";
+import { $Enums } from "@prisma/client";
 
 export async function PATCH(
   req: Request,
@@ -31,13 +31,17 @@ export async function PATCH(
     }
 
     if (body.profileType) {
-      updates.profileType = ProfileType[body.profileType as ProfileType]
-        ? body.profileType
-        : undefined;
+      const isValidProfile = (Object.values($Enums.ProfileType) as string[]).includes(
+        body.profileType,
+      );
+      updates.profileType = isValidProfile ? body.profileType : undefined;
     }
 
     if (body.status) {
-      updates.status = JobStatus[body.status as JobStatus] ? body.status : undefined;
+      const isValidStatus = (Object.values($Enums.JobStatus) as string[]).includes(
+        body.status,
+      );
+      updates.status = isValidStatus ? body.status : undefined;
     }
 
     const updated = await prisma.jobRun.update({
