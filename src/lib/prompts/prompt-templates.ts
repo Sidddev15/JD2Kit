@@ -1,5 +1,5 @@
-import { $Enums } from "@prisma/client";
-type ProfileType = $Enums.ProfileType;
+import { JOB_TRACKS } from "@/lib/constants";
+type ProfileType = (typeof JOB_TRACKS)[number]["value"];
 
 const pretty = (value: unknown) => JSON.stringify(value ?? {}, null, 2);
 
